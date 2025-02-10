@@ -1,16 +1,16 @@
-const asyncHandler = (requestHandler) =>{
-    return (req, res, next)=>{
-        Promise.resolve(requestHandler(req, res, next)).catch((err)=>next(err))
-    }
-}
+// Higher order function that takes a request handler function as parameter
+const asyncHandler = (requestHandler) => {
+  // Returns a middleware function that handles async operations
+  return (req, res, next) => {
+    // Resolves the request handler promise and passes any errors to next middleware
+    Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err));
+  };
+};
 
-export {asyncHandler}
+// Exports the asyncHandler function to be used in other files
+export { asyncHandler };
 
-
-
-
-
-// const asyncHandler = (fn) => async (req, res, next) => 
+// const asyncHandler = (fn) => async (req, res, next) =>
 // {
 //     try{
 //         await fn(req, res, next)
