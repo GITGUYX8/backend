@@ -2,8 +2,6 @@ import mongoose,{Schema} from "mongoose"; // Importing mongoose and Schema from 
 import jwt from "jsonwebtoken"; // Importing jsonwebtoken for token generation
 import bcrypt from "bcrypt"; // Importing bcrypt for password hashing
 
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 
 const userSchema = new Schema( // Defining the user schema
 
@@ -63,6 +61,12 @@ const userSchema = new Schema( // Defining the user schema
         timestamps:true
     }
 )
+/**
+ * Middleware function that hashes the user's password before saving it to the database.
+ * This function is executed before the 'save' event is triggered on the user schema.
+ * It checks if the password has been modified, and if so, it hashes the password using bcrypt
+ * with a cost factor of 10 before saving it to the database.
+ */
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next(); // Proceed if password is modified
 
@@ -102,3 +106,4 @@ userSchema.methods.generateRefreshToken = function() { // Method to generate ref
         }
     )
 }
+export const User = mongoose.model("User", userSchema); // Creating the user model
