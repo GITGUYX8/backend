@@ -21,7 +21,7 @@ import { DB_NAME } from './constants.js';
 import express from 'express';
 
 const app = express()
-
+epi
 (async ()=>{
     try {
         await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)

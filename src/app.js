@@ -9,11 +9,13 @@ import cors from 'cors';
 const app = express();
 
 // Configure CORS middleware with specified origin and credentials
+// Configure CORS middleware with options
 app.use(cors({
+    // Allow requests only from specified origin in environment variables
     origin: process.env.CORS_ORIGIN,
+    // Allow credentials (cookies, authorization headers) to be sent with requests
     credentials: true
-}))
-// Parse incoming JSON payloads with 16kb limit
+}))// Parse incoming JSON payloads with 16kb limit
 app.use(express.json({limit: "16kb"}))
 // Parse URL-encoded bodies with extended mode and 16kb limit
 app.use(express.urlencoded({extended: true, limit: "16kb"}))

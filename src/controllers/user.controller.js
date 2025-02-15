@@ -190,8 +190,67 @@ return res
    }
  })
 // Export registerUser controller
+
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const {oldPassword,newPassword} = req.body;
+    const user = await User.findById(req.user._id);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+    if (!isPasswordCorrect){    
+        throw new ApiError(401, "invalid old password");
+    }
+    user.password = newPassword;
+    await user.save({validateBeforeSave:false});
+})
+
+const getCurrentUser = asyncHandler(async (req, res ) => {
+    return res 
+    .status(200)
+    .json(
+        200,
+        req.user,
+        "current user fetched successfully")
+
+})
+const upadateAccountDetails = asyncHandler(async (req, res) => {
+
+    const user = User.findById(req.user._id,
+    {
+        $set: {
+            fullName: fullName,
+            email: email,
+        },
+        new: true,
+    }
+    ).select("-password")
+
+return res
+.status(200)
+.json(
+    new ApiResponse(
+        200,
+        user,
+        "user updated successfully"
+    ))
+})
+
+const updateUserAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path;
+    if (!avatarLocalPath){
+        throw new ApiError(400, "avatar is not present");
+
+    }
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    
+})
+
+
+    
+
 export {registerUser,
     loginUser,
     logoutUser,
-    refresAccessToken
+    refresAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    upadateAccountDetails
 }   
